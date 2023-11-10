@@ -1,0 +1,43 @@
+# Ignore the node_modules directory
+node_modules
+
+# Ignore log files
+*.log
+
+# Ignore the .env file
+.env
+
+
+# Ignore Terraform files
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform/
+
+# Ignore Terraform CLI configuration
+terraform.rc
+
+# Ignore .tfplan files
+*.tfplan
+
+# Ignore override files as they are usually used to override variables
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore sensitive information
+*.pem
+*.key
+*.pub
+*.p12
+*.pfx
+
+# Ignore local development files
+.terraform.lock.hcl
+
+# Ignore logs
+terraform.log
+
+# Ignore macOS system files
+.DS_Store
