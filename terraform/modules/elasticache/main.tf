@@ -2,9 +2,9 @@ data "aws_vpc" "selected_vpc" {
   default = true
 }
 
-resource "aws_security_group" "todo_redis_sg" {
-  name        = "todo-redis-sg"
-  description = "todo-redis-sg"
+resource "aws_security_group" "todo_redis" {
+  name        = "todo-redis"
+  description = "todo-redis"
   vpc_id      = data.aws_vpc.selected_vpc.id
 
   ingress {
@@ -22,8 +22,8 @@ resource "aws_security_group" "todo_redis_sg" {
   }
 }
 
-resource "aws_elasticache_subnet_group" "todo_redis_subnet_group" {
-  name       = "todo-redis-subnet-group"
+resource "aws_elasticache_subnet_group" "todo_redis" {
+  name       = "todo-redis"
   subnet_ids = ["subnet-0e9f505412d4431cd"]
 }
 
@@ -38,6 +38,6 @@ resource "aws_elasticache_cluster" "todo_redis" {
   port                       = 6379
   az_mode                    = "single-az"
   auto_minor_version_upgrade = false
-  security_group_ids         = [aws_security_group.todo_redis_sg.id]
-  subnet_group_name          = aws_elasticache_subnet_group.todo_redis_subnet_group.name
+  security_group_ids         = [aws_security_group.todo_redis.id]
+  subnet_group_name          = aws_elasticache_subnet_group.todo_redis.name
 }

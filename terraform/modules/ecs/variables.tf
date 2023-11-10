@@ -1,7 +1,9 @@
 variable "redis_url" {
-  type = string
+  description = "Redis URL that will be used by the todo app task definition!"
+  type        = string
 }
 
 variable "target_group_arn" {
-  type = string
+  description = "Target group that will be attached to the ecs service that will be created!"
+  type        = string
 }

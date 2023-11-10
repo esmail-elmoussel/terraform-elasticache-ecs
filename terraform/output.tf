@@ -1,7 +1,9 @@
-output "lb_dns_name" {
-  value = module.lb.lb_dns_name
+output "dns_name" {
+  description = "The DNS name for the created load balancer"
+  value       = module.lb.lb_dns_name
 }
 
 output "redis_url" {
-  value = module.elasticache.redis_url
+  description = "The URL for the created Redis cluster"
+  value       = module.elasticache.elasticache_cluster_redis_url
 }
