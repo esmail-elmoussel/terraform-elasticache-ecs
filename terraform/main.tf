@@ -3,7 +3,7 @@ terraform {
     organization = "esmail-elmoussel"
 
     workspaces {
-      name = "todo-workspace"
+      name = "sample-app"
     }
   }
 

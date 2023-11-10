@@ -2,9 +2,9 @@ data "aws_vpc" "selected_vpc" {
   default = true
 }
 
-resource "aws_security_group" "todo_redis" {
-  name        = "todo-redis"
-  description = "todo-redis"
+resource "aws_security_group" "sample_app_redis" {
+  name        = "sample-app-redis"
+  description = "sample-app-redis"
   vpc_id      = data.aws_vpc.selected_vpc.id
 
   ingress {
@@ -22,14 +22,14 @@ resource "aws_security_group" "todo_redis" {
   }
 }
 
-resource "aws_elasticache_subnet_group" "todo_redis" {
-  name       = "todo-redis"
+resource "aws_elasticache_subnet_group" "sample_app_redis" {
+  name       = "sample-app-redis"
   subnet_ids = ["subnet-0e9f505412d4431cd"]
 }
 
-resource "aws_elasticache_cluster" "todo_redis" {
+resource "aws_elasticache_cluster" "sample_app_redis" {
   apply_immediately          = true
-  cluster_id                 = "todo-redis"
+  cluster_id                 = "sample-app-redis"
   engine                     = "redis"
   node_type                  = "cache.t2.micro"
   num_cache_nodes            = 1
@@ -38,6 +38,6 @@ resource "aws_elasticache_cluster" "todo_redis" {
   port                       = 6379
   az_mode                    = "single-az"
   auto_minor_version_upgrade = false
-  security_group_ids         = [aws_security_group.todo_redis.id]
-  subnet_group_name          = aws_elasticache_subnet_group.todo_redis.name
+  security_group_ids         = [aws_security_group.sample_app_redis.id]
+  subnet_group_name          = aws_elasticache_subnet_group.sample_app_redis.name
 }

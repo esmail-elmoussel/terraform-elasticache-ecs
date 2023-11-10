@@ -1,5 +1,5 @@
-resource "aws_ecrpublic_repository" "todo" {
-  repository_name = "todo"
+resource "aws_ecrpublic_repository" "sample-app" {
+  repository_name = "sample-app"
 
   catalog_data {
     architectures     = ["ARM 64"]

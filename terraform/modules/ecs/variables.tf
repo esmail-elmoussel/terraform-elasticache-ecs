@@ -1,5 +1,5 @@
 variable "redis_url" {
-  description = "Redis URL that will be used by the todo app task definition!"
+  description = "Redis URL that will be used by the sample app task definition!"
   type        = string
 }
 

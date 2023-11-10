@@ -2,9 +2,9 @@ data "aws_vpc" "selected_vpc" {
   default = true
 }
 
-resource "aws_security_group" "todo_ecs" {
-  name        = "todo-ecs"
-  description = "todo-ecs"
+resource "aws_security_group" "sample_app_ecs" {
+  name        = "sample-app-ecs"
+  description = "sample-app-ecs"
   vpc_id      = data.aws_vpc.selected_vpc.id
 
   ingress {
@@ -22,8 +22,8 @@ resource "aws_security_group" "todo_ecs" {
   }
 }
 
-resource "aws_iam_role" "todo_ecs_task_execution" {
-  name = "todo-ecs-task-execution"
+resource "aws_iam_role" "sample_app_ecs_task_execution" {
+  name = "sample-app-ecs-task-execution"
 
   assume_role_policy = jsonencode({
     "Version" : "2008-10-17",
@@ -40,8 +40,8 @@ resource "aws_iam_role" "todo_ecs_task_execution" {
   })
 }
 
-resource "aws_iam_policy" "todo_ecs" {
-  name = "todo-ecs"
+resource "aws_iam_policy" "sample_app_ecs" {
+  name = "sample-app-ecs"
 
   policy = jsonencode({
     "Version" : "2012-10-17",
@@ -64,19 +64,19 @@ resource "aws_iam_policy" "todo_ecs" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_role_policy" {
-  role       = aws_iam_role.todo_ecs_task_execution.name
-  policy_arn = aws_iam_policy.todo_ecs.arn
+  role       = aws_iam_role.sample_app_ecs_task_execution.name
+  policy_arn = aws_iam_policy.sample_app_ecs.arn
 }
 
-resource "aws_ecs_cluster" "todo_cluster" {
-  name = "todo-cluster"
+resource "aws_ecs_cluster" "sample_app_cluster" {
+  name = "sample-app-cluster"
 }
 
-resource "aws_ecs_task_definition" "todo" {
-  family                   = "todo"
+resource "aws_ecs_task_definition" "sample_app" {
+  family                   = "sample-app"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  execution_role_arn       = aws_iam_role.todo_ecs_task_execution.arn
+  execution_role_arn       = aws_iam_role.sample_app_ecs_task_execution.arn
   cpu                      = 256
   memory                   = 512
 
@@ -87,8 +87,8 @@ resource "aws_ecs_task_definition" "todo" {
 
   container_definitions = jsonencode([
     {
-      name  = "todo"
-      image = "esmailelmoussel/todo-app:latest"
+      name  = "sample-app"
+      image = "esmailelmoussel/sample-app:latest"
       portMappings = [
         {
           containerPort = 3000
@@ -105,25 +105,25 @@ resource "aws_ecs_task_definition" "todo" {
   ])
 }
 
-resource "aws_ecs_service" "todo" {
-  name             = "todo"
-  cluster          = aws_ecs_cluster.todo_cluster.id
-  task_definition  = aws_ecs_task_definition.todo.arn
+resource "aws_ecs_service" "sample_app" {
+  name             = "sample-app"
+  cluster          = aws_ecs_cluster.sample_app_cluster.id
+  task_definition  = aws_ecs_task_definition.sample_app.arn
   launch_type      = "FARGATE"
   platform_version = "LATEST"
   desired_count    = 1
 
   network_configuration {
     subnets          = ["subnet-0e9f505412d4431cd", "subnet-0e5a6c54c57881bb5"]
-    security_groups  = [aws_security_group.todo_ecs.id]
+    security_groups  = [aws_security_group.sample_app_ecs.id]
     assign_public_ip = true
   }
 
   load_balancer {
     target_group_arn = var.target_group_arn
-    container_name   = "todo"
+    container_name   = "sample-app"
     container_port   = 3000
   }
 
-  depends_on = [aws_ecs_task_definition.todo]
+  depends_on = [aws_ecs_task_definition.sample_app]
 }
