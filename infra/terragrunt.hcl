@@ -1,5 +1,5 @@
-generate "backend_file" {
-  path      = "backend.tf"
+generate "backend" {
+  path      = "terragrunt-auto-generated-backend.tf"
   if_exists = "overwrite_terragrunt"
 
   contents = <<EOF
@@ -21,11 +21,17 @@ terraform {
 
   required_version = ">= 1.2.0"
 }
+
+provider "aws" {
+  region     = "us-east-1"
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
+}
 EOF
 }
 
-generate "variables_file" {
-  path      = "variables.tf"
+generate "aws_variables" {
+  path      = "terragrunt-auto-generated-variables.tf"
   if_exists = "overwrite_terragrunt"
 
   contents = <<EOF
